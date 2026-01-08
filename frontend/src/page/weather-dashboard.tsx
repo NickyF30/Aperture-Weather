@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { RefreshCw, MapPin, Wind, Droplets, Cloud, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CurrentWeatherCard } from "@/components/ui/layout/current-weather-card";
+import { LoadingSkeleton } from "@/components/ui/layout/loading-skeleton";
 
 interface WeatherData {
     cityName: string;
@@ -51,30 +53,17 @@ const WeatherDashboard = () => {
             </div>
 
             {isLoading ? (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <RefreshCw className="h-4 w-4 animate-spin" />
-                    <p>Fetching local weather...</p>
-                </div>
+                <LoadingSkeleton />
             ) : data ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-                    {/* Main Weather Card */}
-                    <Card className="col-span-full">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-lg font-medium">
-                                <div className="flex items-center gap-2">
-                                    <MapPin className="h-5 w-5 text-primary" />
-                                    {data.cityName}
-                                </div>
-                            </CardTitle>
-                            <span className="text-3xl font-bold">{Math.round(data.temp)}°C</span>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-sm text-muted-foreground capitalize">
-                                {data.weather_description} — Feels like {Math.round(data.feels_like)}°C
-                            </p>
-                        </CardContent>
-                    </Card>
+                    {/* Current Weather Card */}
+                    <CurrentWeatherCard 
+                        cityName={data.cityName}
+                        temp={data.temp}
+                        feelsLike={data.feels_like}
+                        description={data.weather_description}
+                    />
 
                     {/* Humidity */}
                     <Card>
