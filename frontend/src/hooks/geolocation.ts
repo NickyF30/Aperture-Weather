@@ -27,7 +27,7 @@ export function useGeolocation() {
     setLocationData((prev) => ({ ...prev, isLoading: true, error: null }));
 
     const options: PositionOptions = {
-      enableHighAccuracy: true, 
+      enableHighAccuracy: true, // might not work on desktops
       timeout: 10000,
       maximumAge: 0,
     };

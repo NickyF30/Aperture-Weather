@@ -1,6 +1,8 @@
 import { useGeolocation } from "@/hooks/geolocation";
 import { useQuery } from "@tanstack/react-query";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, MapPin, Wind, Droplets, Cloud, Eye } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface WeatherData {
   cityName: string;
@@ -16,7 +18,7 @@ interface WeatherData {
 const WeatherDashboard = () => {
   const { coordinates, error: geoError, getLocation, isLoading: isGeoLoading } = useGeolocation();
 
-  const { data, isLoading: isWeatherLoading, error: weatherError } = useQuery<WeatherData>({
+  const { data, isLoading: isWeatherLoading, isFetching } = useQuery<WeatherData>({
     queryKey: ['weather', coordinates],
     queryFn: async () => {
       if (!coordinates) return null;
@@ -26,31 +28,97 @@ const WeatherDashboard = () => {
       if (!response.ok) throw new Error('Failed to fetch weather');
       return response.json();
     },
-    enabled: !!coordinates, // only run if coordinates are available
+    enabled: !!coordinates,
   });
 
-  if (isGeoLoading) return <div>Locating you...</div>;
-  if (geoError) return <div>Error: {geoError}</div>;
+  const isLoading = isGeoLoading || isWeatherLoading;
+
+  if (geoError) return <div className="p-8 text-destructive">Error: {geoError}</div>;
 
   return (
-    <div className="p-8">
-      <div className="flex items-center gap-4 mb-4">
-        <h1 className="text-2xl font-bold">Weather Data</h1>
-        <button 
+    <div className="p-8 space-y-4 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
+        <Button 
+          variant="outline" 
+          size="icon"
           onClick={() => getLocation()} 
-          className="p-2 hover:bg-muted rounded-full"
-          disabled={isWeatherLoading}
+          disabled={isLoading}
         >
-          <RefreshCw className={isWeatherLoading ? "animate-spin" : ""} />
-        </button>
+          <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
+        </Button>
       </div>
 
-      {isWeatherLoading ? (
-        <p>Fetching weather for your location...</p>
+      {isLoading ? (
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          <p>Fetching local weather...</p>
+        </div>
+      ) : data ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="col-span-full">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-lg font-medium">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  {data.cityName}
+                </div>
+              </CardTitle>
+              <span className="text-3xl font-bold">{Math.round(data.temp)}°C</span>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground capitalize">
+                {data.weather_description} — Feels like {Math.round(data.feels_like)}°C
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Humidity</CardTitle>
+              <Droplets className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.humidity}%</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
+              <Wind className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.wind_speed} m/s</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Clouds</CardTitle>
+              <Cloud className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.clouds}%</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Visibility</CardTitle>
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{(data.visibility / 1000).toFixed(1)} km</div>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
-        <pre className="bg-muted p-4 rounded">
-          {data ? JSON.stringify(data, null, 2) : "No data available"}
-        </pre>
+        <Card>
+          <CardContent className="pt-6 text-center text-muted-foreground">
+            No weather data available. Please enable location access.
+          </CardContent>
+        </Card>
       )}
     </div>
   );
