@@ -39,6 +39,7 @@ const WeatherDashboard = () => {
     <div className="p-8 space-y-4 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
+
         <Button 
           variant="outline" 
           size="icon"
@@ -56,6 +57,8 @@ const WeatherDashboard = () => {
         </div>
       ) : data ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+            {/* Main Weather Card */}
           <Card className="col-span-full">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg font-medium">
@@ -73,6 +76,7 @@ const WeatherDashboard = () => {
             </CardContent>
           </Card>
 
+            {/* Humidity */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Humidity</CardTitle>
@@ -83,16 +87,18 @@ const WeatherDashboard = () => {
             </CardContent>
           </Card>
 
+            {/* Wind Speed Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
               <Wind className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{data.wind_speed} m/s</div>
+              <div className="text-2xl font-bold">{(data.wind_speed * 3.6).toFixed(1)} km/h</div>
             </CardContent>
           </Card>
 
+            {/* Clouds Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Clouds</CardTitle>
@@ -103,6 +109,7 @@ const WeatherDashboard = () => {
             </CardContent>
           </Card>
 
+            {/* Visibility Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Visibility</CardTitle>
