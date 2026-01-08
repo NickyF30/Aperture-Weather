@@ -5,130 +5,130 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface WeatherData {
-  cityName: string;
-  temp: number;
-  feels_like: number;
-  humidity: number;
-  wind_speed: number;
-  weather_description: string;
-  visibility: number;
-  clouds: number;
+    cityName: string;
+    temp: number;
+    feels_like: number;
+    humidity: number;
+    wind_speed: number;
+    weather_description: string;
+    visibility: number;
+    clouds: number;
 }
 
 const WeatherDashboard = () => {
-  const { coordinates, error: geoError, getLocation, isLoading: isGeoLoading } = useGeolocation();
+    const { coordinates, error: geoError, getLocation, isLoading: isGeoLoading } = useGeolocation();
 
-  const { data, isLoading: isWeatherLoading, isFetching } = useQuery<WeatherData>({
-    queryKey: ['weather', coordinates],
-    queryFn: async () => {
-      if (!coordinates) return null;
-      const response = await fetch(
-        `http://localhost:3001/api/weather?lat=${coordinates.lat}&lon=${coordinates.lon}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch weather');
-      return response.json();
-    },
-    enabled: !!coordinates,
-  });
+    const { data, isLoading: isWeatherLoading, isFetching } = useQuery<WeatherData>({
+        queryKey: ['weather', coordinates],
+        queryFn: async () => {
+            if (!coordinates) return null;
+            const response = await fetch(
+                `http://localhost:3001/api/weather?lat=${coordinates.lat}&lon=${coordinates.lon}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch weather');
+            return response.json();
+        },
+        enabled: !!coordinates,
+    });
 
-  const isLoading = isGeoLoading || isWeatherLoading;
+    const isLoading = isGeoLoading || isWeatherLoading;
 
-  if (geoError) return <div className="p-8 text-destructive">Error: {geoError}</div>;
+    if (geoError) return <div className="p-8 text-destructive">Error: {geoError}</div>;
 
-  return (
-    <div className="p-8 space-y-4 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
+    return (
+        <div className="p-8 space-y-4 max-w-4xl mx-auto">
+            <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
 
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={() => getLocation()} 
-          disabled={isLoading}
-        >
-          <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
-        </Button>
-      </div>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => getLocation()}
+                    disabled={isLoading}
+                >
+                    <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
+                </Button>
+            </div>
 
-      {isLoading ? (
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <RefreshCw className="h-4 w-4 animate-spin" />
-          <p>Fetching local weather...</p>
-        </div>
-      ) : data ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-
-            {/* Main Weather Card */}
-          <Card className="col-span-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-medium">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  {data.cityName}
+            {isLoading ? (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    <p>Fetching local weather...</p>
                 </div>
-              </CardTitle>
-              <span className="text-3xl font-bold">{Math.round(data.temp)}°C</span>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground capitalize">
-                {data.weather_description} — Feels like {Math.round(data.feels_like)}°C
-              </p>
-            </CardContent>
-          </Card>
+            ) : data ? (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-            {/* Humidity */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Humidity</CardTitle>
-              <Droplets className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{data.humidity}%</div>
-            </CardContent>
-          </Card>
+                    {/* Main Weather Card */}
+                    <Card className="col-span-full">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-lg font-medium">
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="h-5 w-5 text-primary" />
+                                    {data.cityName}
+                                </div>
+                            </CardTitle>
+                            <span className="text-3xl font-bold">{Math.round(data.temp)}°C</span>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm text-muted-foreground capitalize">
+                                {data.weather_description} — Feels like {Math.round(data.feels_like)}°C
+                            </p>
+                        </CardContent>
+                    </Card>
 
-            {/* Wind Speed Card */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
-              <Wind className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{(data.wind_speed * 3.6).toFixed(1)} km/h</div>
-            </CardContent>
-          </Card>
+                    {/* Humidity */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Humidity</CardTitle>
+                            <Droplets className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{data.humidity}%</div>
+                        </CardContent>
+                    </Card>
 
-            {/* Clouds Card */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Clouds</CardTitle>
-              <Cloud className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{data.clouds}%</div>
-            </CardContent>
-          </Card>
+                    {/* Wind Speed Card */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
+                            <Wind className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{(data.wind_speed * 3.6).toFixed(1)} km/h</div>
+                        </CardContent>
+                    </Card>
 
-            {/* Visibility Card */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Visibility</CardTitle>
-              <Eye className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{(data.visibility / 1000).toFixed(1)} km</div>
-            </CardContent>
-          </Card>
+                    {/* Clouds Card */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Clouds</CardTitle>
+                            <Cloud className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{data.clouds}%</div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Visibility Card */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Visibility</CardTitle>
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{(data.visibility / 1000).toFixed(1)} km</div>
+                        </CardContent>
+                    </Card>
+                </div>
+            ) : (
+                <Card>
+                    <CardContent className="pt-6 text-center text-muted-foreground">
+                        No weather data available. Please enable location access.
+                    </CardContent>
+                </Card>
+            )}
         </div>
-      ) : (
-        <Card>
-          <CardContent className="pt-6 text-center text-muted-foreground">
-            No weather data available. Please enable location access.
-          </CardContent>
-        </Card>
-      )}
-    </div>
-  );
+    );
 };
 
 export default WeatherDashboard;

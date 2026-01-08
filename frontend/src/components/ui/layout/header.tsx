@@ -28,16 +28,16 @@ const Header = () => {
                     {/* Sun icon visible when dark, hidden and rotated when light */}
                     <Sun
                         className={`h-6 w-6 text-yellow-500 transition-all duration-500 ${isDark
-                                ? "opacity-100 rotate-0 scale-100"
-                                : "opacity-0 -rotate-90 scale-0 absolute"
+                            ? "opacity-100 rotate-0 scale-100"
+                            : "opacity-0 -rotate-90 scale-0 absolute"
                             }`}
                     />
 
                     {/* Moon icon visible when light, hidden and rotated when dark */}
                     <Moon
                         className={`h-6 w-6 text-blue-900 transition-all duration-500 ${isDark
-                                ? "opacity-0 rotate-90 scale-0 absolute"
-                                : "opacity-100 rotate-0 scale-100"
+                            ? "opacity-0 rotate-90 scale-0 absolute"
+                            : "opacity-100 rotate-0 scale-100"
                             }`}
                     />
                 </div>

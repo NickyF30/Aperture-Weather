@@ -34,20 +34,20 @@ export class WeatherService {
   async getCoordinatesByCity(cityName: string) {
     const url = `${this.geoUrl}/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${this.apiKey}`;
     const response = await fetch(url);
-    
+
     if (!response.ok) throw new Error('Geocoding service failed');
-    
+
     const data = await response.json();
     if (!data.length) throw new Error('City not found');
-    
+
     return { lat: data[0].lat, lon: data[0].lon };
   }
 
   async getCurrentWeather(lat: number, lon: number): Promise<WeatherData> {
     const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
-    
+
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`Weather API error: ${response.statusText}`);
     }
@@ -73,5 +73,5 @@ export class WeatherService {
   validateCityQuery(query: unknown) {
     return CityQuerySchema.parse(query);
   }
-  
+
 }
