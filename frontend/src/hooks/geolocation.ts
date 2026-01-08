@@ -1,0 +1,77 @@
+import { useState, useEffect, useCallback } from "react";
+import type { Coordinates } from "@/api/types";
+
+interface GeoLocationState {
+  coordinates: Coordinates | null;
+  error: string | null;
+  isLoading: boolean;
+}
+
+export function useGeolocation() {
+  const [locationData, setLocationData] = useState<GeoLocationState>({
+    coordinates: null,
+    error: null,
+    isLoading: true,
+  });
+
+  const getLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      setLocationData({
+        coordinates: null,
+        error: "Geolocation is not supported by your browser",
+        isLoading: false,
+      });
+      return;
+    }
+
+    setLocationData((prev) => ({ ...prev, isLoading: true, error: null }));
+
+    const options: PositionOptions = {
+      enableHighAccuracy: true, 
+      timeout: 10000,
+      maximumAge: 0,
+    };
+
+    const handleSuccess = (position: GeolocationPosition) => {
+      setLocationData({
+        coordinates: {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        },
+        error: null,
+        isLoading: false,
+      });
+    };
+
+    const handleError = (error: GeolocationPositionError) => {
+      let errorMessage: string;
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          errorMessage = "Location permission denied. Please enable it in browser settings.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          errorMessage = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          errorMessage = "Location request timed out.";
+          break;
+        default:
+          errorMessage = "An unknown error occurred.";
+          break;
+      }
+      setLocationData({
+        coordinates: null,
+        error: errorMessage,
+        isLoading: false,
+      });
+    };
+
+    navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
+  }, []);
+
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
+
+  return { ...locationData, getLocation };
+}
