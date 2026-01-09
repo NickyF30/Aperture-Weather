@@ -9,8 +9,8 @@ const app = Fastify({ logger: true });
 
 // check for API key
 if (!process.env.OPENWEATHER_API_KEY) {
-    app.log.error('Missing OPENWEATHER_API_KEY in environment');
-    process.exit(1);
+  app.log.error('Missing OPENWEATHER_API_KEY in environment');
+  process.exit(1);
 }
 
 const weatherService = new WeatherService(process.env.OPENWEATHER_API_KEY!);
@@ -38,14 +38,25 @@ app.get('/api/weather', async (request, reply) => {
 
 //city based route for frontend
 app.get('/api/weather/city', async (request, reply) => {
-    try {
-      const { q } = weatherService.validateCityQuery(request.query);
-      const { lat, lon } = await weatherService.getCoordinatesByCity(q);
-      const weather = await weatherService.getCurrentWeather(lat, lon);
-      return weather;
-    } catch (error: any) {
-      return reply.code(404).send({ error: error.message || 'City search failed' });
-    }
+  try {
+    const { q } = weatherService.validateCityQuery(request.query);
+    const { lat, lon } = await weatherService.getCoordinatesByCity(q);
+    const weather = await weatherService.getCurrentWeather(lat, lon);
+    return weather;
+  } catch (error: any) {
+    return reply.code(404).send({ error: error.message || 'City search failed' });
+  }
+});
+
+app.get('/api/weather/forecast', async (request, reply) => {
+  try {
+    const { lat, lon } = weatherService.validateQuery(request.query);
+    const forecast = await weatherService.getForecast(lat, lon);
+    return forecast;
+  } catch (error) {
+    app.log.error(error);
+    reply.code(400).send({ error: 'Invalid request' });
+  }
 });
 
 app.listen({ port: Number(process.env.PORT) || 3001 }, (err) => {

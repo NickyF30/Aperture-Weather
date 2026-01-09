@@ -68,6 +68,24 @@ export class WeatherService {
     };
   }
 
+  async getForecast(lat: number, lon: number) {
+    const url = `${this.baseUrl}/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Forecast API failed');
+
+    const data = await response.json();
+
+    // Group 3-hour chunks into daily summaries
+    const dailyForecast = data.list.filter((item: any) => item.dt_txt.includes("12:00:00"));
+
+    return dailyForecast.map((day: any) => ({
+      date: day.dt,
+      temp: day.main.temp,
+      description: day.weather[0].description,
+      icon: day.weather[0].icon
+    }));
+  }
+
   validateQuery(query: unknown) {
     return WeatherQuerySchema.parse(query);
   }

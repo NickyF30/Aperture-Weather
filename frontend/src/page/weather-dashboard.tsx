@@ -9,6 +9,7 @@ import { WindCard } from "@/components/ui/layout/cards/wind-card";
 import { HumidityCard } from "@/components/ui/layout/cards/humidity-card";
 import { CloudCard } from "@/components/ui/layout/cards/cloud-card";
 import { VisibilityCard } from "@/components/ui/layout/cards/visibility-card";
+import { DailyForecastCard } from "@/components/ui/layout/cards/daily-forecast";
 
 interface WeatherData {
     cityName: string;
@@ -20,6 +21,13 @@ interface WeatherData {
     weather_description: string;
     visibility: number;
     clouds: number;
+}
+
+interface ForecastData {
+    date: number;
+    temp: number;
+    description: string;
+    icon: string;
 }
 
 const WeatherDashboard = () => {
@@ -38,7 +46,19 @@ const WeatherDashboard = () => {
         enabled: !!coordinates,
     });
 
-    const isLoading = isGeoLoading || isWeatherLoading;
+    const { data: forecastData, isLoading: isForecastLoading } = useQuery<ForecastData[]>({
+        queryKey: ['forecast', coordinates],
+        queryFn: async () => {
+            if (!coordinates) return null;
+            const response = await fetch(
+                `http://localhost:3001/api/weather/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}`
+            );
+            return response.json();
+        },
+        enabled: !!coordinates,
+    });
+
+    const isLoading = isGeoLoading || isWeatherLoading || isForecastLoading;
 
     if (geoError) return <div className="p-8 text-destructive">Error: {geoError}</div>;
 
@@ -90,6 +110,9 @@ const WeatherDashboard = () => {
                     <VisibilityCard
                         visibility={data.visibility}
                     />
+                    {/* Daily Forecast Card */}
+                    <DailyForecastCard
+                        forecast={forecastData || []} />
 
                 </div>
             ) : (
