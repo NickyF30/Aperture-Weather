@@ -1,10 +1,14 @@
 import { useGeolocation } from "@/hooks/geolocation";
 import { useQuery } from "@tanstack/react-query";
-import { RefreshCw, Wind, Droplets, Cloud, Eye } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CurrentWeatherCard } from "@/components/ui/layout/current-weather-card";
-import { LoadingSkeleton } from "@/components/ui/layout/loading-skeleton";
+import { CurrentWeatherCard } from "@/components/ui/layout/cards/current-weather-card";
+import { LoadingSkeleton } from "@/components/ui/layout/cards/loading-skeleton";
+import { WindCard } from "@/components/ui/layout/cards/wind-card";
+import { HumidityCard } from "@/components/ui/layout/cards/humidity-card";
+import { CloudCard } from "@/components/ui/layout/cards/cloud-card";
+import { VisibilityCard } from "@/components/ui/layout/cards/visibility-card";
 
 interface WeatherData {
     cityName: string;
@@ -67,59 +71,26 @@ const WeatherDashboard = () => {
                     />
 
                     {/* Humidity */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Humidity</CardTitle>
-                            <Droplets className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{data.humidity}%</div>
-                        </CardContent>
-                    </Card>
+                    <HumidityCard
+                        humidity={data.humidity}
+                    />
 
-                    {/* Wind Speed Card */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
-                            <Wind className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{(data.wind_speed * 3.6).toFixed(1)} km/h</div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Wind Direction Card */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Wind Direction</CardTitle>
-                            <Wind className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{data.wind_deg}°</div>
-                        </CardContent>
-                    </Card>
+                    {/* Wind Card */}
+                    <WindCard
+                        speed={data.wind_speed}
+                        deg={data.wind_deg}
+                    />
 
                     {/* Clouds Card */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Clouds</CardTitle>
-                            <Cloud className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{data.clouds}%</div>
-                        </CardContent>
-                    </Card>
+                    <CloudCard
+                        clouds={data.clouds}
+                    />
 
                     {/* Visibility Card */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Visibility</CardTitle>
-                            <Eye className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{(data.visibility / 1000).toFixed(1)} km</div>
-                        </CardContent>
-                    </Card>
+                    <VisibilityCard
+                        visibility={data.visibility}
+                    />
+
                 </div>
             ) : (
                 <Card>
