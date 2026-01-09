@@ -82,13 +82,22 @@ const WeatherDashboard = () => {
             ) : data ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-                    {/* Current Weather Card */}
-                    <CurrentWeatherCard
-                        cityName={data.cityName}
-                        temp={data.temp}
-                        feelsLike={data.feels_like}
-                        description={data.weather_description}
-                    />
+                    {/* Current Weather */}
+                    <div className="lg:col-span-3">
+                        <CurrentWeatherCard
+                            cityName={data.cityName}
+                            temp={data.temp}
+                            feelsLike={data.feels_like}
+                            description={data.weather_description}
+                        />
+                    </div>
+
+                    {/* Daily Forecast */}
+                    <div className="lg:col-span-1">
+                        <DailyForecastCard
+                            forecast={forecastData || []}
+                        />
+                    </div>
 
                     {/* Humidity */}
                     <HumidityCard
@@ -110,10 +119,6 @@ const WeatherDashboard = () => {
                     <VisibilityCard
                         visibility={data.visibility}
                     />
-
-                    {/* Daily Forecast Card */}
-                    <DailyForecastCard
-                        forecast={forecastData || []} />
 
                 </div>
             ) : (
