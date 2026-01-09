@@ -17,6 +17,7 @@ interface WeatherData {
   feels_like: number;
   humidity: number;
   wind_speed: number;
+  wind_deg: number;
   weather_description: string;
   visibility: number;
   clouds: number;
@@ -60,6 +61,7 @@ export class WeatherService {
       feels_like: data.main.feels_like,
       humidity: data.main.humidity,
       wind_speed: data.wind.speed,
+      wind_deg: data.wind.deg,
       weather_description: data.weather[0].description,
       visibility: data.visibility,
       clouds: data.clouds.all,

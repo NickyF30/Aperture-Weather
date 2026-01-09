@@ -14,10 +14,10 @@ export const CurrentWeatherCard = ({ cityName, temp, feelsLike, description }: C
             <CardTitle className="text-lg font-medium">
                 <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5 text-primary" />
-                    {cityName}
+                    <span className="text-2xl font-semibold">{cityName}</span>
                 </div>
             </CardTitle>
-            <span className="text-3xl font-bold">{Math.round(temp)}°C</span>
+            <span className="text-5xl font-bold">{Math.round(temp)}°C</span>
         </CardHeader>
         <CardContent>
             <p className="text-sm text-muted-foreground capitalize">

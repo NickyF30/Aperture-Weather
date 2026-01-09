@@ -1,6 +1,6 @@
 import { useGeolocation } from "@/hooks/geolocation";
 import { useQuery } from "@tanstack/react-query";
-import { RefreshCw, MapPin, Wind, Droplets, Cloud, Eye } from "lucide-react";
+import { RefreshCw, Wind, Droplets, Cloud, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrentWeatherCard } from "@/components/ui/layout/current-weather-card";
@@ -12,6 +12,7 @@ interface WeatherData {
     feels_like: number;
     humidity: number;
     wind_speed: number;
+    wind_deg: number;
     weather_description: string;
     visibility: number;
     clouds: number;
@@ -58,7 +59,7 @@ const WeatherDashboard = () => {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
                     {/* Current Weather Card */}
-                    <CurrentWeatherCard 
+                    <CurrentWeatherCard
                         cityName={data.cityName}
                         temp={data.temp}
                         feelsLike={data.feels_like}
@@ -84,6 +85,17 @@ const WeatherDashboard = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{(data.wind_speed * 3.6).toFixed(1)} km/h</div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Wind Direction Card */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Wind Direction</CardTitle>
+                            <Wind className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{data.wind_deg}°</div>
                         </CardContent>
                     </Card>
 
