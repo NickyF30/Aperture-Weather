@@ -63,7 +63,7 @@ const WeatherDashboard = () => {
     if (geoError) return <div className="p-8 text-destructive">Error: {geoError}</div>;
 
     return (
-        <div className="p-8 space-y-4 max-w-4xl mx-auto">
+        <div className="p-8 space-y-4 mx-auto">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
 
@@ -110,6 +110,7 @@ const WeatherDashboard = () => {
                     <VisibilityCard
                         visibility={data.visibility}
                     />
+
                     {/* Daily Forecast Card */}
                     <DailyForecastCard
                         forecast={forecastData || []} />

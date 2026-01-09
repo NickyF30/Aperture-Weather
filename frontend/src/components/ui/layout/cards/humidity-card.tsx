@@ -10,7 +10,7 @@ export const HumidityCard = ({ humidity }: HumidityCard) => {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Humidity</CardTitle>
-                <Droplets className="h-4 w-4 text-blue-200" />
+                <Droplets className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">{humidity}%</div>
