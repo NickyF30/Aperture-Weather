@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, CloudSun, ArrowDown, ArrowUp } from "lucide-react";
 
-interface CurrentWeatherProps {
+interface CurrentWeather {
     cityName: string;
     temp: number;
     tempMin: number;
@@ -17,7 +17,7 @@ export const CurrentWeatherCard = ({
     tempMax, 
     feelsLike, 
     description 
-}: CurrentWeatherProps) => {
+}: CurrentWeather) => {
 
     const currentDate = new Date().toLocaleDateString('en-CA', {
         weekday: 'long',
@@ -26,7 +26,7 @@ export const CurrentWeatherCard = ({
     });
 
     return (
-        <Card>
+        <Card className = "h-full">
             <CardContent className="p-8">
                 <div className="flex flex-row justify-between items-start">
                     <div className="space-y-6">

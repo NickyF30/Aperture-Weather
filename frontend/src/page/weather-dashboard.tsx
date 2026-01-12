@@ -11,6 +11,7 @@ import { CloudCard } from "@/components/ui/layout/cards/cloud-card";
 import { VisibilityCard } from "@/components/ui/layout/cards/visibility-card";
 import { DailyForecastCard } from "@/components/ui/layout/cards/daily-forecast";
 import { HourlyForecastCard } from "@/components/ui/layout/cards/hourly-forecast-card";
+import { WeatherSummaryCard } from "@/components/ui/layout/cards/weather-summary-card";
 
 interface WeatherData {
     cityName: string;
@@ -89,53 +90,44 @@ const WeatherDashboard = () => {
             {isLoading ? (
                 <LoadingSkeleton />
             ) : data ? (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="space-y-4">
+                    {/* Top Section */}
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        
+                        {/* Left Column: Summary + Current Weather */}
+                        <div className="lg:col-span-3 flex flex-col gap-4">
+                            <WeatherSummaryCard
+                                cityName={data.cityName}
+                                temp={data.temp}
+                                feelsLike={data.feels_like}
+                                description={data.weather_description}
+                                humidity={data.humidity}
+                                windSpeed={data.wind_speed}
+                            />
+                            <CurrentWeatherCard
+                                cityName={data.cityName}
+                                temp={data.temp}
+                                tempMin={data.temp_min}
+                                tempMax={data.temp_max}
+                                feelsLike={data.feels_like}
+                                description={data.weather_description}
+                            />
+                        </div>
 
-                    {/* Current Weather */}
-                    <div className="lg:col-span-3">
-                        <CurrentWeatherCard
-                            cityName={data.cityName}
-                            temp={data.temp}
-                            tempMin={data.temp_min}
-                            tempMax={data.temp_max}
-                            feelsLike={data.feels_like}
-                            description={data.weather_description}
-                        />
+                        {/* Right Column: Hourly + Daily */}
+                        <div className="lg:col-span-1 flex flex-col gap-4">
+                            <HourlyForecastCard hourly={forecastData?.hourly || []} />
+                            <DailyForecastCard forecast={forecastData?.daily || []} />
+                        </div>
                     </div>
 
-                    {/* Daily Forecast */}
-                    <div className="lg:col-span-1">
-                        <DailyForecastCard
-                            forecast={forecastData?.daily || []}
-                        />
+                    {/* Bottom Section: Metrics */}
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <HumidityCard humidity={data.humidity} />
+                        <WindCard speed={data.wind_speed} deg={data.wind_deg} />
+                        <CloudCard clouds={data.clouds} />
+                        <VisibilityCard visibility={data.visibility} />
                     </div>
-
-                    {/* Hourly Card */}
-                    <div className="lg:col-span-1">
-                        <HourlyForecastCard hourly={forecastData?.hourly || []} />
-                    </div>
-
-                    {/* Humidity */}
-                    <HumidityCard
-                        humidity={data.humidity}
-                    />
-
-                    {/* Wind Card */}
-                    <WindCard
-                        speed={data.wind_speed}
-                        deg={data.wind_deg}
-                    />
-
-                    {/* Clouds Card */}
-                    <CloudCard
-                        clouds={data.clouds}
-                    />
-
-                    {/* Visibility Card */}
-                    <VisibilityCard
-                        visibility={data.visibility}
-                    />
-
                 </div>
             ) : (
                 <Card>
