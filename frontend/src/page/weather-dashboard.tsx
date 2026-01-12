@@ -1,6 +1,6 @@
 import { useGeolocation } from "@/hooks/geolocation";
 import { useQuery } from "@tanstack/react-query";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrentWeatherCard } from "@/components/ui/layout/cards/current-weather-card";
@@ -12,6 +12,8 @@ import { VisibilityCard } from "@/components/ui/layout/cards/visibility-card";
 import { DailyForecastCard } from "@/components/ui/layout/cards/daily-forecast";
 import { HourlyForecastCard } from "@/components/ui/layout/cards/hourly-forecast-card";
 import { WeatherSummaryCard } from "@/components/ui/layout/cards/weather-summary-card";
+import { SunPhaseCard } from "@/components/ui/layout/cards/sun-phase-card";
+import { PhotoScoreCard } from "@/components/ui/layout/cards/photo-score-card";
 
 interface WeatherData {
     cityName: string;
@@ -91,11 +93,21 @@ const WeatherDashboard = () => {
                 <LoadingSkeleton />
             ) : data ? (
                 <div className="space-y-4">
+
+                    {/* Photography Score Card */}
+                {coordinates && (
+                    <PhotoScoreCard 
+                        data={data} 
+                        lat={coordinates.lat} 
+                        lon={coordinates.lon} 
+                    />
+                )}
+
                     {/* Top Section */}
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         
                         {/* Left Column: Summary + Current Weather */}
-                        <div className="lg:col-span-3 flex flex-col gap-4">
+                        <div className="lg:col-span-3 flex flex-col gap-4 h-full">
                             <WeatherSummaryCard
                                 cityName={data.cityName}
                                 temp={data.temp}
@@ -127,6 +139,10 @@ const WeatherDashboard = () => {
                         <WindCard speed={data.wind_speed} deg={data.wind_deg} />
                         <CloudCard clouds={data.clouds} />
                         <VisibilityCard visibility={data.visibility} />
+                        <SunPhaseCard 
+                            lat={coordinates?.lat || 0} 
+                            lon={coordinates?.lon || 0} 
+                        />
                     </div>
                 </div>
             ) : (

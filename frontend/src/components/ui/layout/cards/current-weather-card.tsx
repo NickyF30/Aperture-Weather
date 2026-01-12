@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, CloudSun, ArrowDown, ArrowUp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CurrentWeather {
     cityName: string;
@@ -16,7 +17,7 @@ export const CurrentWeatherCard = ({
     tempMin, 
     tempMax, 
     feelsLike, 
-    description 
+    description,
 }: CurrentWeather) => {
 
     const currentDate = new Date().toLocaleDateString('en-CA', {
@@ -26,7 +27,7 @@ export const CurrentWeatherCard = ({
     });
 
     return (
-        <Card className = "h-full">
+        <Card className={cn("h-full", "flex-1")}>
             <CardContent className="p-8">
                 <div className="flex flex-row justify-between items-start">
                     <div className="space-y-6">

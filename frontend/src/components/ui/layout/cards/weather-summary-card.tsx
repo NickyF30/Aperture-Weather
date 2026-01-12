@@ -25,10 +25,10 @@ export const WeatherSummaryCard = ({
                 <Sparkles className="h-4 w-4 text-amber-400" />
             </CardHeader>
             <CardContent>
-                <p className="text-lg font-medium leading-relaxed">
+                <p className="text-lg font-medium leading-relaxed line-clamp-3">
                     It is currently <span className="text-sky-400 font-bold">{description}</span> in {cityName}. 
                     The temperature is {Math.round(temp)}°C, but it feels like {Math.round(feelsLike)}°C.
-                    Humidity is at {humidity}% with wind speeds of {Math.round(windSpeed)} m/s.
+                    Humidity is at {humidity}% with wind speeds of {Math.round(windSpeed)} m/s. 
                 </p>
             </CardContent>
         </Card>
