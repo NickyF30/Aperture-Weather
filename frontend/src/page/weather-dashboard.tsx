@@ -10,10 +10,13 @@ import { HumidityCard } from "@/components/ui/layout/cards/humidity-card";
 import { CloudCard } from "@/components/ui/layout/cards/cloud-card";
 import { VisibilityCard } from "@/components/ui/layout/cards/visibility-card";
 import { DailyForecastCard } from "@/components/ui/layout/cards/daily-forecast";
+import { HourlyForecastCard } from "@/components/ui/layout/cards/hourly-forecast-card";
 
 interface WeatherData {
     cityName: string;
     temp: number;
+    temp_min: number;
+    temp_max: number;
     feels_like: number;
     humidity: number;
     wind_speed: number;
@@ -28,6 +31,11 @@ interface ForecastData {
     temp: number;
     description: string;
     icon: string;
+}
+
+interface ForecastResponse {
+    daily: ForecastData[];
+    hourly: ForecastData[];
 }
 
 const WeatherDashboard = () => {
@@ -46,7 +54,8 @@ const WeatherDashboard = () => {
         enabled: !!coordinates,
     });
 
-    const { data: forecastData, isLoading: isForecastLoading } = useQuery<ForecastData[]>({
+    const { data: forecastData, isLoading: isForecastLoading } = useQuery<ForecastResponse>({
+
         queryKey: ['forecast', coordinates],
         queryFn: async () => {
             if (!coordinates) return null;
@@ -87,6 +96,8 @@ const WeatherDashboard = () => {
                         <CurrentWeatherCard
                             cityName={data.cityName}
                             temp={data.temp}
+                            tempMin={data.temp_min}
+                            tempMax={data.temp_max}
                             feelsLike={data.feels_like}
                             description={data.weather_description}
                         />
@@ -95,8 +106,13 @@ const WeatherDashboard = () => {
                     {/* Daily Forecast */}
                     <div className="lg:col-span-1">
                         <DailyForecastCard
-                            forecast={forecastData || []}
+                            forecast={forecastData?.daily || []}
                         />
+                    </div>
+
+                    {/* Hourly Card */}
+                    <div className="lg:col-span-1">
+                        <HourlyForecastCard hourly={forecastData?.hourly || []} />
                     </div>
 
                     {/* Humidity */}

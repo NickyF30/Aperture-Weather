@@ -1,14 +1,23 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, CloudSun } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { MapPin, CloudSun, ArrowDown, ArrowUp } from "lucide-react";
 
 interface CurrentWeatherProps {
     cityName: string;
     temp: number;
+    tempMin: number;
+    tempMax: number;
     feelsLike: number;
     description: string;
 }
 
-export const CurrentWeatherCard = ({ cityName, temp, feelsLike, description }: CurrentWeatherProps) => {
+export const CurrentWeatherCard = ({ 
+    cityName, 
+    temp, 
+    tempMin, 
+    tempMax, 
+    feelsLike, 
+    description 
+}: CurrentWeatherProps) => {
 
     const currentDate = new Date().toLocaleDateString('en-CA', {
         weekday: 'long',
@@ -17,7 +26,7 @@ export const CurrentWeatherCard = ({ cityName, temp, feelsLike, description }: C
     });
 
     return (
-        <Card className="col-span-full overflow-hidden border-none backdrop-blur-md">
+        <Card>
             <CardContent className="p-8">
                 <div className="flex flex-row justify-between items-start">
                     <div className="space-y-6">
@@ -29,11 +38,23 @@ export const CurrentWeatherCard = ({ cityName, temp, feelsLike, description }: C
                             <p className="text-sm text-muted-foreground">{currentDate}</p>
                         </div>
 
-                        <div className="space-y-0">
+                        <div className="space-y-2">
                             <span className="text-8xl font-black tracking-tighter">
                                 {Math.round(temp)}°
                             </span>
-                            <div className="pt-2">
+                            
+                            <div className="flex items-center gap-4 pt-1">
+                                <div className="flex items-center gap-1 text-sky-400">
+                                    <ArrowDown className="h-5 w-5" />
+                                    <span className="text-lg font-medium">{Math.round(tempMin)}°</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-orange-400">
+                                    <ArrowUp className="h-5 w-5" />
+                                    <span className="text-lg font-medium">{Math.round(tempMax)}°</span>
+                                </div>
+                            </div>
+
+                            <div>
                                 <p className="text-xl font-medium capitalize leading-none">
                                     {description}
                                 </p>
@@ -42,11 +63,6 @@ export const CurrentWeatherCard = ({ cityName, temp, feelsLike, description }: C
                                 </p>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="relative group">
-                        <div className="opacity-100 transition-opacity" />
-                        <CloudSun className="h-32 w-32 text-white " strokeWidth={1.5} />
                     </div>
                 </div>
             </CardContent>

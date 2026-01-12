@@ -14,6 +14,8 @@ export const CityQuerySchema = z.object({
 interface WeatherData {
   cityName: string;
   temp: number;
+  temp_min: number;
+  temp_max: number;
   feels_like: number;
   humidity: number;
   wind_speed: number;
@@ -58,6 +60,8 @@ export class WeatherService {
     return {
       cityName: data.name,
       temp: data.main.temp,
+      temp_min: data.main.temp_min,
+      temp_max: data.main.temp_max,
       feels_like: data.main.feels_like,
       humidity: data.main.humidity,
       wind_speed: data.wind.speed,
@@ -78,13 +82,23 @@ export class WeatherService {
     // Group 3-hour chunks into daily summaries
     const dailyForecast = data.list.filter((item: any) => item.dt_txt.includes("12:00:00"));
 
-    return dailyForecast.map((day: any) => ({
-      date: day.dt,
-      temp: day.main.temp,
-      description: day.weather[0].description,
-      icon: day.weather[0].icon
+    const hourlyForecast = data.list.slice(0, 8).map((item: any) => ({
+      date: item.dt,
+      temp: item.main.temp,
+      description: item.weather[0].description,
+      icon: item.weather[0].icon
     }));
-  }
+
+    return {
+      daily: dailyForecast.map((day: any) => ({
+        date: day.dt,
+        temp: day.main.temp,
+        description: day.weather[0].description,
+        icon: day.weather[0].icon
+      })),
+      hourly: hourlyForecast
+    };
+}
 
   validateQuery(query: unknown) {
     return WeatherQuerySchema.parse(query);
