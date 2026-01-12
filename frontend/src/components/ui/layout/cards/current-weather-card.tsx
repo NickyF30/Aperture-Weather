@@ -11,12 +11,12 @@ interface CurrentWeather {
     description: string;
 }
 
-export const CurrentWeatherCard = ({ 
-    cityName, 
-    temp, 
-    tempMin, 
-    tempMax, 
-    feelsLike, 
+export const CurrentWeatherCard = ({
+    cityName,
+    temp,
+    tempMin,
+    tempMax,
+    feelsLike,
     description,
 }: CurrentWeather) => {
 
@@ -43,7 +43,7 @@ export const CurrentWeatherCard = ({
                             <span className="text-8xl font-black tracking-tighter">
                                 {Math.round(temp)}°
                             </span>
-                            
+
                             <div className="flex items-center gap-4 pt-1">
                                 <div className="flex items-center gap-1 text-sky-400">
                                     <ArrowDown className="h-5 w-5" />

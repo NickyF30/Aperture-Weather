@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import SunCalc from "suncalc"; 
+import SunCalc from "suncalc";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,10 +14,10 @@ interface WeatherData {
 }
 
 export function calculatePhotoScore(data: WeatherData, lat: number, lon: number): { score: number; verdict: string; reasons: string[] } {
-  let score = 5; 
+  let score = 5;
   const reasons: string[] = [];
   const now = new Date();
-  
+
   // Get sun times
   const times = SunCalc.getTimes(now, lat, lon);
 
@@ -33,7 +33,7 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
       // No score increase
     } else if (data.clouds >= 30) {
       // Golden Hour + Clouds = Best possible conditions
-      score += 4; 
+      score += 4;
       reasons.push("Epic Golden Hour! Clouds will catch the color.");
     } else {
       // Clear Golden Hour
@@ -51,15 +51,15 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
 
   // 2. CLOUD COVER 
   if (!isGoldenHourTime) {
-      if (data.clouds >= 30 && data.clouds <= 70) {
-        score += 2;
-        reasons.push("Good cloud texture.");
-      } else if (data.clouds === 100) {
-        score -= 1;
-        reasons.push("Flat light (Overcast).");
-      } else if (data.clouds < 10) {
-        reasons.push("Clear skies (High contrast).");
-      }
+    if (data.clouds >= 30 && data.clouds <= 70) {
+      score += 2;
+      reasons.push("Good cloud texture.");
+    } else if (data.clouds === 100) {
+      score -= 1;
+      reasons.push("Flat light (Overcast).");
+    } else if (data.clouds < 10) {
+      reasons.push("Clear skies (High contrast).");
+    }
   }
 
   // 3. VISIBILITY / ATMOSPHERE

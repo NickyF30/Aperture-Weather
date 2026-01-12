@@ -10,10 +10,10 @@ interface WeatherSummary {
     windSpeed: number;
 }
 
-export const WeatherSummaryCard = ({ 
-    cityName, 
-    temp, 
-    feelsLike, 
+export const WeatherSummaryCard = ({
+    cityName,
+    temp,
+    feelsLike,
     description,
     humidity,
     windSpeed
@@ -26,9 +26,9 @@ export const WeatherSummaryCard = ({
             </CardHeader>
             <CardContent>
                 <p className="text-lg font-medium leading-relaxed line-clamp-3">
-                    It is currently <span className="text-sky-400 font-bold">{description}</span> in {cityName}. 
+                    It is currently <span className="text-sky-400 font-bold">{description}</span> in {cityName}.
                     The temperature is {Math.round(temp)}°C, but it feels like {Math.round(feelsLike)}°C.
-                    Humidity is at {humidity}% with wind speeds of {Math.round(windSpeed)} m/s. 
+                    Humidity is at {humidity}% with wind speeds of {Math.round(windSpeed)} m/s.
                 </p>
             </CardContent>
         </Card>

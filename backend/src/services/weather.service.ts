@@ -23,6 +23,10 @@ interface WeatherData {
   weather_description: string;
   visibility: number;
   clouds: number;
+  coord: {
+    lat: number;
+    lon: number;
+  };
 }
 
 export class WeatherService {
@@ -69,6 +73,10 @@ export class WeatherService {
       weather_description: data.weather[0].description,
       visibility: data.visibility,
       clouds: data.clouds.all,
+      coord: {
+        lat: data.coord.lat,
+        lon: data.coord.lon,
+      },
     };
   }
 

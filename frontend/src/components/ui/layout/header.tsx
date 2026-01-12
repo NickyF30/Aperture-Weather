@@ -1,23 +1,27 @@
 import { useTheme } from "@/context/theme-provider";
 import { Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
-
-
+import { CitySearch } from "@/components/ui/city-search"; 
 
 const Header = () => {
     const { theme, setTheme } = useTheme();
     const isDark = theme === "dark";
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur py-2 px-8 supports-[backdrop-filter]:bg-background/10">
-            <div className="container mx-auto flex items-center justify-between h-16">
+        <header className="sticky top-0 z-1 w-full border-b bg-background/95 backdrop-blur py-2 px-8 supports-[backdrop-filter]:bg-background/10">
+            <div className="container mx-auto flex items-center justify-between h-16 gap-4">
                 {/* Logo Section */}
-                <Link to={"/"}>
+                <Link to={"/"} className="flex-shrink-0">
                     <img
                         src="/ApertureText.PNG"
                         alt="ApertureLogo"
                         className="h-14 object-contain"
                     />
                 </Link>
+
+                {/* Search Bar */}
+                <div className="flex-1 flex justify-center max-w-md mx-auto">
+                    <CitySearch />
+                </div>
 
                 {/* Theme Toggle */}
                 <div
