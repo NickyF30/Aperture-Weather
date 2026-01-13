@@ -26,6 +26,7 @@ interface WeatherData {
   aqi: number;
   uv: number;
   wind_gust: number;
+  icon: string; 
   coord: {
     lat: number;
     lon: number;
@@ -107,6 +108,7 @@ export class WeatherService {
       wind_speed: weatherData.wind.speed,
       wind_deg: weatherData.wind.deg,
       wind_gust: weatherData.wind.gust,
+      icon: weatherData.weather[0].icon,
       weather_description: weatherData.weather[0].description,
       visibility: weatherData.visibility,
       clouds: weatherData.clouds.all,

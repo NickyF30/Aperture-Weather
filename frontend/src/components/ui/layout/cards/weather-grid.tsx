@@ -43,6 +43,7 @@ export const WeatherGrid = ({ data, forecastData }: WeatherGrid) => {
                         tempMax={data.temp_max}
                         feelsLike={data.feels_like}
                         description={data.weather_description}
+                        icon={data.icon}
                     />
                 </div>
 

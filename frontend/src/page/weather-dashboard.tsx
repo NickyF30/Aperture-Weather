@@ -19,6 +19,7 @@ interface WeatherData {
     wind_gust: number;
     weather_description: string;
     visibility: number;
+    icon: string;
     clouds: number;
     aqi: number;
     uv: number;

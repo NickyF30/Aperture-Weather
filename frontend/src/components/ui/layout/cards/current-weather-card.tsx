@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, CloudSun, ArrowDown, ArrowUp } from "lucide-react";
+import { MapPin, ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CurrentWeather {
@@ -9,6 +9,7 @@ interface CurrentWeather {
     tempMax: number;
     feelsLike: number;
     description: string;
+    icon: string;
 }
 
 export const CurrentWeatherCard = ({
@@ -18,6 +19,7 @@ export const CurrentWeatherCard = ({
     tempMax,
     feelsLike,
     description,
+    icon,
 }: CurrentWeather) => {
 
     const currentDate = new Date().toLocaleDateString('en-CA', {
@@ -65,6 +67,16 @@ export const CurrentWeatherCard = ({
                             </div>
                         </div>
                     </div>
+
+                    {icon && (
+                        <div className="flex justify-center items-center">
+                            <img
+                                src={`https://openweathermap.org/img/wn/${icon}@4x.png`}
+                                alt={description}
+                                className="w-64 h-64 object-contain"
+                            />
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>
