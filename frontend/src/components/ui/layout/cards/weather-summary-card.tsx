@@ -1,34 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Camera } from "lucide-react";
+import { calculatePhotoScore } from "@/lib/utils";
 
-interface WeatherSummary {
-    cityName: string;
-    temp: number;
-    feelsLike: number;
-    description: string;
-    humidity: number;
-    windSpeed: number;
+interface WeatherSummaryProps {
+    data: any; 
+    lat: number;
+    lon: number;
 }
 
-export const WeatherSummaryCard = ({
-    cityName,
-    temp,
-    feelsLike,
-    description,
-    humidity,
-    windSpeed
-}: WeatherSummary) => {
+export const WeatherSummaryCard = ({ data, lat, lon }: WeatherSummaryProps) => {
+    const { verdict, reasons } = calculatePhotoScore(data, lat, lon);
+    
+    // Get the most significant reason (usually the first one)
+    const primaryReason = reasons.length > 0 ? reasons[0] : "Conditions are stable.";
+   
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Weather Summary</CardTitle>
-                <Sparkles className="h-4 w-4 text-amber-400" />
+                <CardTitle className="text-sm font-medium">Photographer's Summary</CardTitle>
+                <Camera className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
-                <p className="text-lg font-small leading-relaxed line-clamp-3">
-                    It is currently <span className="text-sky-400 font-bold">{description}</span> in {cityName}.
-                    The temperature is {Math.round(temp)}°C, but it feels like {Math.round(feelsLike)}°C.
-                    Humidity is at {humidity}% with wind speeds of {Math.round(windSpeed)} m/s.
+                <p className="text-lg font-small leading-relaxed">
+                    Conditions are currently <span className="font-bold text-sky-400">{verdict}</span> for photography in {data.cityName}. 
+                    {" "}{primaryReason}
+                    {" "}The temperature is {Math.round(data.temp)}°C with {data.clouds}% cloud cover.
                 </p>
             </CardContent>
         </Card>

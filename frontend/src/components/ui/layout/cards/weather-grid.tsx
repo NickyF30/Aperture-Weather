@@ -32,12 +32,9 @@ export const WeatherGrid = ({ data, forecastData }: WeatherGrid) => {
                 {/* Left Column: Summary + Current Weather */}
                 <div className="lg:col-span-3 flex flex-col gap-4 h-full">
                     <WeatherSummaryCard
-                        cityName={data.cityName}
-                        temp={data.temp}
-                        feelsLike={data.feels_like}
-                        description={data.weather_description}
-                        humidity={data.humidity}
-                        windSpeed={data.wind_speed}
+                        data={data}
+                        lat={data.coord.lat}
+                        lon={data.coord.lon}
                     />
                     <CurrentWeatherCard
                         cityName={data.cityName}

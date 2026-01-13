@@ -30,9 +30,22 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
   // Check strict time windows
   const isGoldenHourTime = (now >= times.goldenHour && now <= times.sunset) || (now >= times.sunrise && now <= times.goldenHourEnd);
   const isBlueHourTime = (now >= times.sunset && now <= times.dusk) || (now >= times.dawn && now <= times.sunrise);
+  // Define Night as time after dusk or before dawn
+  const isNight = now > times.dusk || now < times.dawn;
 
-  // 1. LIGHT QUALITY (Time + Clouds)
-  if (isGoldenHourTime) {
+  // 1. LIGHT QUALITY 
+  if (isNight) {
+    score -= 3;
+    reasons.push("Night time: Low light. Tripod/High ISO required.");
+
+    if (data.clouds < 10 && data.visibility > 10000) {
+      score += 4; // Bring score back up for Astro
+      reasons.push("Clear dark skies: Excellent for Astrophotography.");
+    } else if (data.clouds > 60) {
+      score -= 1;
+      reasons.push("Night overcast: Poor shooting conditions.");
+    }
+  } else if (isGoldenHourTime) {
     if (data.clouds > 85) {
       reasons.push("Golden Hour time, but light is blocked by thick clouds.");
       // No score increase
@@ -53,7 +66,7 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
   }
 
   // 2. CLOUD COVER 
-  if (!isGoldenHourTime && !isBlueHourTime) {
+  if (!isGoldenHourTime && !isBlueHourTime && !isNight) {
     if (data.clouds >= 30 && data.clouds <= 70) {
       score += 2;
       reasons.push("Good cloud texture for depth.");
@@ -70,8 +83,10 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
     score += 3;
     reasons.push("Fog/Mist detected! Moody atmosphere.");
   } else if (data.visibility > 10000) {
-    score += 1;
-    reasons.push("Excellent visibility.");
+    if (!isNight) {
+      score += 1;
+      reasons.push("Excellent visibility.");
+    }
   }
 
   // 4. AIR QUALITY 
@@ -79,7 +94,6 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
     if (data.aqi <= 2) {
       reasons.push("Clean air: Crisp, sharp details.");
     } else if (data.aqi >= 4) {
-      // High pollution can be "bad" for health but "good" for sunsets (redder sun)
       if (isGoldenHourTime) {
         reasons.push("High particles: Intense sunset colors likely.");
       } else {
@@ -99,8 +113,8 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
     reasons.push("High heat: Risk of heat haze on telephoto shots.");
   }
 
-  // 6. UV INDEX (Midday harshness)
-  if (!isGoldenHourTime && !isBlueHourTime && data.uv !== undefined) {
+  // 6. UV INDEX
+  if (!isGoldenHourTime && !isBlueHourTime && !isNight && data.uv !== undefined) {
     if (data.uv > 7) {
       score -= 1;
       reasons.push("High UV: Harsh shadows. Use ND filters/diffusers.");
