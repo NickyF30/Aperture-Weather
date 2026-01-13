@@ -10,6 +10,7 @@ import { SunPhaseCard } from "@/components/ui/layout/cards/sun-phase-card";
 import { PhotoScoreCard } from "@/components/ui/layout/cards/photo-score-card";
 import { AQICard } from "@/components/ui/layout/cards/aqi-card";
 import { UVCard } from "@/components/ui/layout/cards/uv-card";
+import { MoonCard } from "@/components/ui/layout/cards/moon-card";
 
 interface WeatherGrid {
     data: any;
@@ -72,6 +73,10 @@ export const WeatherGrid = ({ data, forecastData }: WeatherGrid) => {
                 <CloudCard clouds={data.clouds} />
                 <VisibilityCard visibility={data.visibility} />
                 <SunPhaseCard
+                    lat={data.coord.lat}
+                    lon={data.coord.lon}
+                />
+                <MoonCard
                     lat={data.coord.lat}
                     lon={data.coord.lon}
                 />
