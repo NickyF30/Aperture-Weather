@@ -16,6 +16,7 @@ interface WeatherData {
     humidity: number;
     wind_speed: number;
     wind_deg: number;
+    wind_gust: number;
     weather_description: string;
     visibility: number;
     clouds: number;
@@ -28,6 +29,7 @@ interface ForecastData {
     temp: number;
     description: string;
     icon: string;
+    pop: number;
 }
 
 interface ForecastResponse {

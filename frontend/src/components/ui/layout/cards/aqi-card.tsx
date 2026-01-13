@@ -3,9 +3,15 @@ import { Wind } from "lucide-react";
 
 interface AQICardProps {
     aqi: number;
+    pollutants: {
+        pm2_5: number;
+        pm10: number;
+        no2: number;
+        o3: number;
+    };
 }
 
-export const AQICard = ({ aqi }: AQICardProps) => {
+export const AQICard = ({ aqi, pollutants }: AQICardProps) => {
     const getAQILabel = (value: number) => {
         switch (value) {
             case 1: return { text: "Good", color: "text-green-500", desc: "Air quality is satisfactory." };
@@ -27,9 +33,23 @@ export const AQICard = ({ aqi }: AQICardProps) => {
             </CardHeader>
             <CardContent>
                 <div className={`text-2xl font-bold ${info.color}`}>{aqi} - {info.text}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1 mb-3">
                     {info.desc}
                 </p>
+
+                {pollutants && (
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t text-xs">
+                        <div className="flex flex-col">
+                            <span className="text-muted-foreground">PM2.5</span>
+                            <span className="font-medium">{pollutants.pm2_5} μg/m³</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-muted-foreground">PM10</span>
+                            <span className="font-medium">{pollutants.pm10} μg/m³</span>
+                        </div>
+                        {/* PM2.5 is crucial for haze/photography clarity */}
+                    </div>
+                )}
             </CardContent>
         </Card>
     );

@@ -25,9 +25,16 @@ interface WeatherData {
   clouds: number;
   aqi: number;
   uv: number;
+  wind_gust: number;
   coord: {
     lat: number;
     lon: number;
+  };
+  pollutants: {   
+    pm2_5: number;
+    pm10: number;
+    no2: number;
+    o3: number;
   };
 }
 
@@ -99,10 +106,12 @@ export class WeatherService {
       humidity: weatherData.main.humidity,
       wind_speed: weatherData.wind.speed,
       wind_deg: weatherData.wind.deg,
+      wind_gust: weatherData.wind.gust,
       weather_description: weatherData.weather[0].description,
       visibility: weatherData.visibility,
       clouds: weatherData.clouds.all,
       aqi: aqiData?.list?.[0]?.main?.aqi || 0,
+      pollutants: aqiData?.list?.[0]?.components,
       uv: uvData?.value || 0,
       coord: {
         lat: weatherData.coord.lat,
@@ -125,7 +134,8 @@ export class WeatherService {
       date: item.dt,
       temp: item.main.temp,
       description: item.weather[0].description,
-      icon: item.weather[0].icon
+      icon: item.weather[0].icon,
+      pop: item.pop
     }));
 
     return {
@@ -133,7 +143,8 @@ export class WeatherService {
         date: day.dt,
         temp: day.main.temp,
         description: day.weather[0].description,
-        icon: day.weather[0].icon
+        icon: day.weather[0].icon,
+        pop: day.pop
       })),
       hourly: hourlyForecast
     };

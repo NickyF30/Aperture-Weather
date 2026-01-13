@@ -55,11 +55,19 @@ export const WeatherGrid = ({ data, forecastData }: WeatherGrid) => {
                 </div>
             </div>
 
+
             {/* Bottom Section: Metrics */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <HumidityCard humidity={data.humidity} />
-                <WindCard speed={data.wind_speed} deg={data.wind_deg} />
-                <AQICard aqi={data.aqi} />
+                <WindCard
+                    speed={data.wind_speed}
+                    deg={data.wind_deg}
+                    gust={data.wind_gust}
+                />
+                <AQICard
+                    aqi={data.aqi}
+                    pollutants={data.pollutants}
+                />
                 <UVCard uv={data.uv} />
                 <CloudCard clouds={data.clouds} />
                 <VisibilityCard visibility={data.visibility} />

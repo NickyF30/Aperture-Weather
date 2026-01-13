@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 interface WindCard {
     speed: number;
     deg: number;
+    gust: number;
 }
 
 const getWindIcon = (deg: number) => {
@@ -33,7 +34,7 @@ const getWindDirection = (deg: number) => {
     return directions[index];
 };
 
-export const WindCard = ({ speed, deg }: WindCard) => {
+export const WindCard = ({ speed, deg, gust }: WindCard) => {
     // Convert m/s to km/h because openweather gave m/s
     const toKmH = (ms: number) => (ms * 3.6).toFixed(1);
     const Icon = getWindIcon(deg); // direction icon
@@ -42,20 +43,26 @@ export const WindCard = ({ speed, deg }: WindCard) => {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                    Wind Direction
+                    Wind & Gusts
                 </CardTitle>
                 <Wind className="h-4 w-4 text-white-100" />
             </CardHeader>
             <CardContent>
                 <div className="flex items-center gap-4">
-
                     <div className="p-2 bg-primary/10 rounded-full text-primary">
                         <Icon className="h-6 w-6" />
                     </div>
-                    <div>
-                        <div className="text-2xl font-bold">{toKmH(speed)} <span className="text-sm font-normal text-muted-foreground">km/h</span></div>
+                    <div className="space-y-1">
+                        <div className="text-2xl font-bold">
+                            {toKmH(speed)} <span className="text-sm font-normal text-muted-foreground">km/h</span>
+                        </div>
+                        {gust && (
+                            <p className="text-xs font-semibold text-orange-500">
+                                Gusts up to {toKmH(gust)} km/h
+                            </p>
+                        )}
                         <p className="text-xs text-muted-foreground">
-                            From the <span className="font-semibold text-foreground">{getWindDirection(deg)}</span> ({deg}°)
+                            {getWindDirection(deg)} ({deg}°)
                         </p>
                     </div>
                 </div>
