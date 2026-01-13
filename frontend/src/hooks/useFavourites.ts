@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 interface FavoriteCity {
-  id: string; // usually "lat-lon" or city name
+  id: string; 
   name: string;
-  query: string; // The query string used to fetch it
+  query: string; 
   lat: number;
   lon: number;
 }
