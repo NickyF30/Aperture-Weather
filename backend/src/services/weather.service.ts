@@ -23,6 +23,8 @@ interface WeatherData {
   weather_description: string;
   visibility: number;
   clouds: number;
+  aqi: number;
+  uv: number;
   coord: {
     lat: number;
     lon: number;
@@ -70,31 +72,41 @@ export class WeatherService {
   }
 
   async getCurrentWeather(lat: number, lon: number): Promise<WeatherData> {
-    const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
+    const weatherUrl = `${this.baseUrl}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
+    const aqiUrl = `${this.baseUrl}/air_pollution?lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
+    const uvUrl = `${this.baseUrl}/uvi?lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
 
-    const response = await fetch(url);
+    const [weatherRes, aqiRes, uvRes] = await Promise.all([
+      fetch(weatherUrl),
+      fetch(aqiUrl),
+      fetch(uvUrl)
+    ]);
 
-    if (!response.ok) {
-      throw new Error(`Weather API error: ${response.statusText}`);
+    if (!weatherRes.ok) {
+      throw new Error(`Weather API error: ${weatherRes.statusText}`);
     }
 
-    const data = await response.json();
+    const weatherData = await weatherRes.json();
+    const aqiData = aqiRes.ok ? await aqiRes.json() : null;
+    const uvData = uvRes.ok ? await uvRes.json() : null;
 
     return {
-      cityName: data.name,
-      temp: data.main.temp,
-      temp_min: data.main.temp_min,
-      temp_max: data.main.temp_max,
-      feels_like: data.main.feels_like,
-      humidity: data.main.humidity,
-      wind_speed: data.wind.speed,
-      wind_deg: data.wind.deg,
-      weather_description: data.weather[0].description,
-      visibility: data.visibility,
-      clouds: data.clouds.all,
+      cityName: weatherData.name,
+      temp: weatherData.main.temp,
+      temp_min: weatherData.main.temp_min,
+      temp_max: weatherData.main.temp_max,
+      feels_like: weatherData.main.feels_like,
+      humidity: weatherData.main.humidity,
+      wind_speed: weatherData.wind.speed,
+      wind_deg: weatherData.wind.deg,
+      weather_description: weatherData.weather[0].description,
+      visibility: weatherData.visibility,
+      clouds: weatherData.clouds.all,
+      aqi: aqiData?.list?.[0]?.main?.aqi || 0,
+      uv: uvData?.value || 0,
       coord: {
-        lat: data.coord.lat,
-        lon: data.coord.lon,
+        lat: weatherData.coord.lat,
+        lon: weatherData.coord.lon,
       },
     };
   }

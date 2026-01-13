@@ -15,6 +15,7 @@ import { WeatherSummaryCard } from "@/components/ui/layout/cards/weather-summary
 import { SunPhaseCard } from "@/components/ui/layout/cards/sun-phase-card";
 import { PhotoScoreCard } from "@/components/ui/layout/cards/photo-score-card";
 
+
 interface WeatherData {
     cityName: string;
     temp: number;
@@ -27,6 +28,8 @@ interface WeatherData {
     weather_description: string;
     visibility: number;
     clouds: number;
+    aqi: number;
+    uv: number;
 }
 
 interface ForecastData {

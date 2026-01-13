@@ -8,6 +8,8 @@ import { HourlyForecastCard } from "@/components/ui/layout/cards/hourly-forecast
 import { WeatherSummaryCard } from "@/components/ui/layout/cards/weather-summary-card";
 import { SunPhaseCard } from "@/components/ui/layout/cards/sun-phase-card";
 import { PhotoScoreCard } from "@/components/ui/layout/cards/photo-score-card";
+import { AQICard } from "@/components/ui/layout/cards/aqi-card";
+import { UVCard } from "@/components/ui/layout/cards/uv-card";
 
 interface WeatherGrid {
     data: any;
@@ -57,6 +59,8 @@ export const WeatherGrid = ({ data, forecastData }: WeatherGrid) => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <HumidityCard humidity={data.humidity} />
                 <WindCard speed={data.wind_speed} deg={data.wind_deg} />
+                <AQICard aqi={data.aqi} />
+                <UVCard uv={data.uv} />
                 <CloudCard clouds={data.clouds} />
                 <VisibilityCard visibility={data.visibility} />
                 <SunPhaseCard
