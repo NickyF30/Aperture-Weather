@@ -13,7 +13,7 @@ const Header = () => {
                 {/* Logo Section */}
                 <Link to={"/"} className="flex-shrink-0">
                     <img
-                        src="/ApertureText.PNG"
+                        src="/assets/ApertureText.PNG"
                         alt="ApertureLogo"
                         className="h-14 object-contain"
                     />
