@@ -26,9 +26,9 @@ export const AQICard = ({ aqi }: AQICardProps) => {
                 <Wind className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className={`text-2xl font-bold ${info.color}`}>{info.text}</div>
+                <div className={`text-2xl font-bold ${info.color}`}>{aqi} - {info.text}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                    Index: {aqi} - {info.desc}
+                    {info.desc}
                 </p>
             </CardContent>
         </Card>

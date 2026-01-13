@@ -23,9 +23,9 @@ export const UVCard = ({ uv }: UVCardProps) => {
                 <Sun className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className={`text-2xl font-bold ${info.color}`}>{Math.round(uv)}</div>
+                <div className={`text-2xl font-bold ${info.color}`}>{Math.round(uv)} - {info.text}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                    {info.text} - {info.desc}
+                    {info.desc}
                 </p>
             </CardContent>
         </Card>

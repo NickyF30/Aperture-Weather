@@ -71,7 +71,7 @@ const WeatherDashboard = () => {
     return (
         <div className="p-8 space-y-4 mx-auto">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Weather Dashboard</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Your Location</h1>
 
                 <Button
                     variant="outline"
