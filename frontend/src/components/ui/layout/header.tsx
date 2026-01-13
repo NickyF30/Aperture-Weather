@@ -34,7 +34,7 @@ const Header = () => {
                 <div className="flex items-center gap-2">
                     <Link to="/favorites">
                         <Button variant="ghost" className="text-sm font-medium transition-colors hover:text-primary">
-                            Favorites
+                            Favourites
                         </Button>
                     </Link>
                 </div>
