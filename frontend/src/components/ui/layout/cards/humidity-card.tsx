@@ -6,6 +6,12 @@ interface HumidityCard {
 }
 
 export const HumidityCard = ({ humidity }: HumidityCard) => {
+    const getPhotoAdvice = (h: number) => {
+        if (h >= 80) return "Risk of lens fog. High atmospheric haze.";
+        if (h <= 30) return "Dry air: Great for crisp long-distance shots.";
+        return "Standard shooting conditions.";
+    };
+
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -14,6 +20,9 @@ export const HumidityCard = ({ humidity }: HumidityCard) => {
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">{humidity}%</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                    {getPhotoAdvice(humidity)}
+                </p>
             </CardContent>
         </Card>
     );

@@ -153,7 +153,7 @@ export function calculatePhotoScore(data: WeatherData, lat: number, lon: number)
   if (score >= 9) verdict = "World Class";
   else if (score >= 7) verdict = "Excellent";
   else if (score >= 5) verdict = "Good";
-  else if (score >= 3) verdict = "Fair";
+  else if (score > 3) verdict = "Fair";
   else verdict = "Poor";
   return { score, verdict, reasons };
 }

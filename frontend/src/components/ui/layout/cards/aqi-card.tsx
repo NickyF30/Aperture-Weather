@@ -14,12 +14,12 @@ interface AQICardProps {
 export const AQICard = ({ aqi, pollutants }: AQICardProps) => {
     const getAQILabel = (value: number) => {
         switch (value) {
-            case 1: return { text: "Good", color: "text-green-500", desc: "Air quality is satisfactory." };
-            case 2: return { text: "Fair", color: "text-yellow-500", desc: "Air quality is acceptable." };
-            case 3: return { text: "Moderate", color: "text-orange-500", desc: "Members of sensitive groups may experience health effects." };
-            case 4: return { text: "Poor", color: "text-red-500", desc: "Everyone may begin to experience health effects." };
-            case 5: return { text: "Very Poor", color: "text-purple-500", desc: "Health warnings of emergency conditions." };
-            default: return { text: "Unknown", color: "text-muted-foreground", desc: "No data available." };
+            case 1: return { text: "Good", color: "text-green-500", desc: "Air quality is satisfactory.", photo: "Max clarity." };
+            case 2: return { text: "Fair", color: "text-yellow-500", desc: "Air quality is acceptable.", photo: "Good visibility." };
+            case 3: return { text: "Moderate", color: "text-orange-500", desc: "Sensitive groups affected.", photo: "Slight haze adds depth." };
+            case 4: return { text: "Poor", color: "text-red-500", desc: "Health effects likely.", photo: "Heavy haze. Good for sunset colors." };
+            case 5: return { text: "Very Poor", color: "text-purple-500", desc: "Emergency conditions.", photo: "Poor visibility/contrast." };
+            default: return { text: "Unknown", color: "text-muted-foreground", desc: "No data available.", photo: "" };
         }
     };
 
@@ -34,7 +34,7 @@ export const AQICard = ({ aqi, pollutants }: AQICardProps) => {
             <CardContent>
                 <div className={`text-2xl font-bold ${info.color}`}>{aqi} - {info.text}</div>
                 <p className="text-xs text-muted-foreground mt-1 mb-3">
-                    {info.desc}
+                    {info.desc} <span className="font-semibold block mt-1 text-primary/80">{info.photo}</span>
                 </p>
 
                 {pollutants && (
@@ -47,7 +47,6 @@ export const AQICard = ({ aqi, pollutants }: AQICardProps) => {
                             <span className="text-muted-foreground">PM10</span>
                             <span className="font-medium">{pollutants.pm10} μg/m³</span>
                         </div>
-                        {/* PM2.5 is crucial for haze/photography clarity */}
                     </div>
                 )}
             </CardContent>

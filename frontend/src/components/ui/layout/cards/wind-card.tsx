@@ -18,14 +18,14 @@ interface WindCard {
 }
 
 const getWindIcon = (deg: number) => {
-    if (deg >= 337.5 || deg < 22.5) return ArrowDown;       // North wind blows s
-    if (deg >= 22.5 && deg < 67.5) return ArrowDownLeft;   // NE wind blows SW
-    if (deg >= 67.5 && deg < 112.5) return ArrowLeft;      // East wind blows w
-    if (deg >= 112.5 && deg < 157.5) return ArrowUpLeft;   // SE wind blows NW
-    if (deg >= 157.5 && deg < 202.5) return ArrowUp;       // South wind blows N
-    if (deg >= 202.5 && deg < 247.5) return ArrowUpRight;  // SW wind blows NE
-    if (deg >= 247.5 && deg < 292.5) return ArrowRight;     // West wind blows East
-    return ArrowDownRight;                                 // NW wind blows SE
+    if (deg >= 337.5 || deg < 22.5) return ArrowDown;
+    if (deg >= 22.5 && deg < 67.5) return ArrowDownLeft;
+    if (deg >= 67.5 && deg < 112.5) return ArrowLeft;
+    if (deg >= 112.5 && deg < 157.5) return ArrowUpLeft;
+    if (deg >= 157.5 && deg < 202.5) return ArrowUp;
+    if (deg >= 202.5 && deg < 247.5) return ArrowUpRight;
+    if (deg >= 247.5 && deg < 292.5) return ArrowRight;
+    return ArrowDownRight;
 };
 
 const getWindDirection = (deg: number) => {
@@ -35,9 +35,18 @@ const getWindDirection = (deg: number) => {
 };
 
 export const WindCard = ({ speed, deg, gust }: WindCard) => {
-    // Convert m/s to km/h because openweather gave m/s
+    // Convert m/s to km/h
     const toKmH = (ms: number) => (ms * 3.6).toFixed(1);
-    const Icon = getWindIcon(deg); // direction icon
+    const speedKmh = parseFloat(toKmH(speed));
+    
+    const Icon = getWindIcon(deg);
+
+    const getPhotoAdvice = (s: number, g: number) => {
+        if (s > 30 || (g && g * 3.6 > 45)) return "Avoid long exposures. Secure light stands.";
+        if (s > 15) return "Use a sturdy tripod for sharp landscapes.";
+        if (s < 5) return "Calm: Perfect for water reflections.";
+        return "Breezy conditions.";
+    };
 
     return (
         <Card>
@@ -54,7 +63,7 @@ export const WindCard = ({ speed, deg, gust }: WindCard) => {
                     </div>
                     <div className="space-y-1">
                         <div className="text-2xl font-bold">
-                            {toKmH(speed)} <span className="text-sm font-normal text-muted-foreground">km/h</span>
+                            {speedKmh} <span className="text-sm font-normal text-muted-foreground">km/h</span>
                         </div>
                         {gust && (
                             <p className="text-xs font-semibold text-orange-500">
@@ -62,7 +71,7 @@ export const WindCard = ({ speed, deg, gust }: WindCard) => {
                             </p>
                         )}
                         <p className="text-xs text-muted-foreground">
-                            {getWindDirection(deg)} ({deg}°)
+                            {getWindDirection(deg)} ({deg}°) • {getPhotoAdvice(speedKmh, gust)}
                         </p>
                     </div>
                 </div>

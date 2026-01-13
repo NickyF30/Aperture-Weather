@@ -8,6 +8,7 @@ interface VisibilityCardProps {
 export const VisibilityCard = ({ visibility }: VisibilityCardProps) => {
     const isFoggy = visibility <= 1000;
     const isHazy = visibility > 1000 && visibility <= 5000;
+    const isClear = visibility >= 10000;
 
     return (
         <Card className={isFoggy ? "border-orange-400 bg-orange-50/10" : ""}>
@@ -31,7 +32,12 @@ export const VisibilityCard = ({ visibility }: VisibilityCardProps) => {
                     )}
                     {isHazy && (
                          <p className="text-xs text-muted-foreground">
-                            Hazy conditions.
+                            Hazy conditions: Softens background.
+                        </p>
+                    )}
+                    {isClear && (
+                        <p className="text-xs text-muted-foreground">
+                            Clear horizon: Perfect for telephoto.
                         </p>
                     )}
                 </div>
