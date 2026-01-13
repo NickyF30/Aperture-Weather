@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 interface LocationResult {
     name: string;
@@ -13,8 +14,7 @@ interface LocationResult {
 
 export const CitySearch = () => {
     const [query, setQuery] = useState("");
-    const [results, setResults] = useState<LocationResult[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [debouncedQuery, setDebouncedQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -30,30 +30,36 @@ export const CitySearch = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Debouncing
     useEffect(() => {
-        const timer = setTimeout(async () => {
-            if (query.trim().length >= 2) {
-                setIsLoading(true);
-                try {
-                    const response = await fetch(`http://localhost:3001/api/weather/search?q=${encodeURIComponent(query)}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setResults(data);
-                        setIsOpen(true);
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch locations", error);
-                } finally {
-                    setIsLoading(false);
-                }
-            } else {
-                setResults([]);
-                setIsOpen(false);
-            }
+        const timer = setTimeout(() => {
+            setDebouncedQuery(query);
         }, 500); // 500ms delay for debouncing
 
         return () => clearTimeout(timer);
     }, [query]);
+
+    const { data: results = [], isLoading } = useQuery({
+        queryKey: ['citySearch', debouncedQuery],
+        queryFn: async () => {
+            const response = await fetch(`http://localhost:3001/api/weather/search?q=${encodeURIComponent(debouncedQuery)}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch locations");
+            }
+            return response.json() as Promise<LocationResult[]>;
+        },
+        enabled: debouncedQuery.trim().length >= 2, // Only run if query is valid
+        staleTime: 1000 * 60 * 5, // cached for 5 minutes
+    });
+
+    // dropdown
+    useEffect(() => {
+        if (results.length > 0 && query.length >= 2) {
+            setIsOpen(true);
+        } else if (query.length < 2) {
+            setIsOpen(false);
+        }
+    }, [results, query]);
 
     const handleSelectLocation = (location: LocationResult) => {
         const specificQuery = [location.name, location.state, location.country]
@@ -62,6 +68,7 @@ export const CitySearch = () => {
 
         navigate(`/city/${encodeURIComponent(specificQuery)}`);
         setQuery("");
+        setDebouncedQuery("");
         setIsOpen(false);
     };
 
@@ -70,6 +77,7 @@ export const CitySearch = () => {
         if (query.trim()) {
             navigate(`/city/${encodeURIComponent(query)}`);
             setQuery("");
+            setDebouncedQuery("");
             setIsOpen(false);
         }
     };
@@ -93,7 +101,11 @@ export const CitySearch = () => {
                     size="icon"
                     className="absolute right-0 top-0 h-10 w-10 text-muted-foreground hover:text-primary"
                 >
-                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                    {isLoading && query.length >= 2 ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <Search className="h-4 w-4" />
+                    )}
                 </Button>
             </form>
 
