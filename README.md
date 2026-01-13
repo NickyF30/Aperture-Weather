@@ -3,6 +3,9 @@
 ### The Photographer's Essential Planning Tool
 
 ## 1. Project Overview
+<img width="1864" height="944" alt="Screenshot 2026-01-13 114342" src="https://github.com/user-attachments/assets/f534c541-799c-4563-ab85-f9ad9e7a2579" />
+<img width="1859" height="553" alt="Screenshot 2026-01-13 114350" src="https://github.com/user-attachments/assets/e6227014-ae2c-47e5-9683-599ebee44503" />
+
 
 **Aperture Weather** is a specialized, full-stack weather application designed specifically for photographers and cinematographers. While standard weather apps provide basic temperature and precipitation data, Aperture Weather interprets meteorological data to answer the question: *"Is it good conditions to shoot right now?"*
 
@@ -103,7 +106,7 @@ npm install
 ```
 Create a .env file in the backend root:
 ```bash
-PORT=3000
+PORT=3001
 OPENWEATHER_API_KEY=your_api_key_here
 ```
 Start the backend server:
@@ -120,3 +123,4 @@ Start the react development server:
 ```bash
 npm run dev
 ```
+
