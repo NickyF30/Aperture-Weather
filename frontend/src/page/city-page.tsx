@@ -2,10 +2,13 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { LoadingSkeleton } from "@/components/ui/layout/cards/loading-skeleton";
 import { WeatherGrid } from "@/components/ui/layout/cards/weather-grid";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useFavorites } from "@/hooks/useFavourites";
 
 const CityPage = () => {
     const { cityName } = useParams<{ cityName: string }>();
+    const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
     // 1. Fetch Current Weather (Search by City Name)
     const { data: weatherData, isLoading: isWeatherLoading, error } = useQuery({
@@ -29,8 +32,26 @@ const CityPage = () => {
             );
             return response.json();
         },
-        enabled: !!weatherData?.coord, 
+        enabled: !!weatherData?.coord,
     });
+
+    const handleToggleFavorite = () => {
+        if (!weatherData) return;
+
+        const cityId = `${weatherData.coord.lat}-${weatherData.coord.lon}`;
+
+        if (isFavorite(cityId)) {
+            removeFavorite(cityId);
+        } else {
+            addFavorite({
+                id: cityId,
+                name: weatherData.cityName,
+                query: cityName!,
+                lat: weatherData.coord.lat,
+                lon: weatherData.coord.lon
+            });
+        }
+    };
 
     const isLoading = isWeatherLoading || isForecastLoading;
 
@@ -46,8 +67,21 @@ const CityPage = () => {
 
     return (
         <div className="p-8 space-y-4 mx-auto">
-             <h1 className="text-3xl font-bold tracking-tight capitalize">{cityName} Weather</h1>
-            
+            <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold tracking-tight capitalize">{weatherData?.cityName || cityName} Weather</h1>
+                {weatherData && (
+                    <Button
+                        variant={isFavorite(`${weatherData.coord.lat}-${weatherData.coord.lon}`) ? "default" : "outline"}
+                        size="icon"
+                        onClick={handleToggleFavorite}
+                    >
+                        <Star
+                            className={`h-4 w-4 ${isFavorite(`${weatherData.coord.lat}-${weatherData.coord.lon}`) ? "fill-current" : ""}`}
+                        />
+                    </Button>
+                )}
+            </div>
+
             {isLoading || !weatherData ? (
                 <LoadingSkeleton />
             ) : (

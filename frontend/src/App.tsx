@@ -6,6 +6,7 @@ import WeatherDashboard from "./page/weather-dashboard";
 import CityPage from "./page/city-page";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import FavoritesPage from "./page/favourites-page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path="/" element={<WeatherDashboard />} />
               <Route path="/city/:cityName" element={<CityPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
             </Routes>
           </Layout>
         </ThemeProvider>

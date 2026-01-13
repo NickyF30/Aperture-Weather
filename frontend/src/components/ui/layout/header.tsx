@@ -1,7 +1,8 @@
 import { useTheme } from "@/context/theme-provider";
 import { Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
-import { CitySearch } from "@/components/ui/city-search"; 
+import { CitySearch } from "@/components/ui/city-search";
+import { Button } from "@/components/ui/button";
 
 const Header = () => {
     const { theme, setTheme } = useTheme();
@@ -21,6 +22,15 @@ const Header = () => {
                 {/* Search Bar */}
                 <div className="flex-1 flex justify-center max-w-md mx-auto">
                     <CitySearch />
+                </div>
+
+                <div className="flex items-center gap-2">
+
+                    <Link to="/favorites">
+                        <Button variant="ghost" className="text-sm font-medium transition-colors hover:text-primary">
+                            Favorites
+                        </Button>
+                    </Link>
                 </div>
 
                 {/* Theme Toggle */}
