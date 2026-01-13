@@ -38,6 +38,25 @@ export class WeatherService {
     this.apiKey = apiKey;
   }
 
+  async searchLocations(query: string) {
+    // limit set to 5 to show multiple options
+    const url = `${this.geoUrl}/direct?q=${encodeURIComponent(query)}&limit=5&appid=${this.apiKey}`;
+    const response = await fetch(url);
+
+    if (!response.ok) throw new Error('Geocoding service failed');
+
+    const data = await response.json();
+
+    // Map the results to a clean format
+    return data.map((item: any) => ({
+      name: item.name,
+      lat: item.lat,
+      lon: item.lon,
+      country: item.country,
+      state: item.state
+    }));
+  }
+
   async getCoordinatesByCity(cityName: string) {
     const url = `${this.geoUrl}/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${this.apiKey}`;
     const response = await fetch(url);
@@ -106,7 +125,7 @@ export class WeatherService {
       })),
       hourly: hourlyForecast
     };
-}
+  }
 
   validateQuery(query: unknown) {
     return WeatherQuerySchema.parse(query);

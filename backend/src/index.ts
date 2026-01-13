@@ -48,6 +48,16 @@ app.get('/api/weather/city', async (request, reply) => {
   }
 });
 
+app.get('/api/weather/search', async (request, reply) => {
+  try {
+    const { q } = weatherService.validateCityQuery(request.query);
+    const locations = await weatherService.searchLocations(q);
+    return locations;
+  } catch (error: any) {
+    return reply.code(400).send({ error: error.message || 'Search failed' });
+  }
+});
+
 app.get('/api/weather/forecast', async (request, reply) => {
   try {
     const { lat, lon } = weatherService.validateQuery(request.query);

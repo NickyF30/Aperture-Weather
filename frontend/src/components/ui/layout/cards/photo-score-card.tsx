@@ -26,7 +26,7 @@ export const PhotoScoreCard = ({ data, lat, lon }: PhotoScoreProps) => {
                     <Camera className="h-4 w-4 text-primary" />
                     Photography Conditions
                 </CardTitle>
-                <Sparkles className={`h-4 w-4 ${score >= 8 ? "text-yellow-400 animate-pulse" : "text-muted-foreground"}`} />
+                <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" />
             </CardHeader>
             <CardContent>
                 <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
